@@ -1,4 +1,5 @@
 import time
+import re
 from selenium.webdriver.common.keys import Keys
 from amazon_config import (
     get_chrome_web_driver,
@@ -47,11 +48,83 @@ class AmazonAPI:
         print("Starting script...")
         print(f"Looking for {self.search_term} prodcuts...")
         links = self.get_products_links()
-        # do stuff
+
+        # a check to make sure links var is not empty
+        if not links:
+            print("'links' are empty, stopping the script")
+            return
+        print(f"got {len(links)} links to product...")
+        print("Getting products info...")
+
+        products = self.get_products_info(links)
 
         return None
 
+    def get_products_info(self, links):
+        """
+        Method to get information about the found products 
+
+        :param: links       - list of links to products 
+        :return: products   - list of products and its info 
+        """
+        # get all uniq ids "asin"
+        asins = self.get_asins(links)
+        products = []
+        for asin in asins:
+            product = self.get_single_product_info(asin)
+            if product:
+                products.append(product)
+        return products
+
+    def get_single_product_info(self, asin):
+        """
+        Method to collect product information based on asin
+
+        :param: asin - product id
+        :return:  <to update> 
+        """
+        print(f"Product ID: {asin} - getting info...")
+        product_short_url = self.shorten_link(asin)
+        # test it works
+        self.driver.get(f'{product_short_url}')
+        time.sleep(2)
+
+        return "to update"
+
+    def shorten_link(self, asin):
+        """
+        Method to shorten the link so it is easier to handle
+
+        :param: asin - will be used to shorten the link
+        :return: short_link - shortend link for the product
+        """
+        return self.base_url + 'dp/' + asin
+
+    def get_asins(self, links):
+        return [self.get_asin(link) for link in links]
+
+    def get_asin(self, link):
+        """
+        Method uses regex to match the asin name from the url
+
+        :param: link - to extract the asin from 
+        :return: asin - the asin number as a string 
+        """
+        # use regex to get the asin
+        regex = re.compile('https.*/dp/(\w+)/ref=.*')
+        try:
+            asin = regex.match(link).group(1)
+            return str(asin)
+        # handle regex failing because of no match in link
+        except AttributeError:
+            pass
+
     def get_products_links(self):
+        """
+        Method to collect product links
+
+        :return: items_links - list of links
+        """
         # Open url
         self.driver.get(self.base_url)
         # find the search bar by ID
