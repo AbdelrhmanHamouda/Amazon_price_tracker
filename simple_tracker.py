@@ -52,7 +52,35 @@ class AmazonAPI:
         return None
 
     def get_products_links(self):
+        # Open url
         self.driver.get(self.base_url)
+        # find the search bar by ID
+        amazon_search_box = self.driver.find_element_by_id(
+            'twotabsearchtextbox')
+        # type in the search bar the {search_term}
+        amazon_search_box.send_keys(self.search_term)
+        # press enter
+        amazon_search_box.send_keys(Keys.ENTER)
+        # give the page time to load
+        time.sleep(2)
+        # TODO:: implement the filtering for price rnage and type
+
+        # this xpath will match the whole table of results, each result is an element of that table
+        results_list = self.driver.find_elements_by_xpath(
+            "//div[@class='s-main-slot s-result-list s-search-results sg-row']")
+        items_links = []
+        try:
+            # match all the search results elements by xpath
+            search_results = results_list[0].find_elements_by_xpath(
+                "//div/div[1]/div/div/div[1]/h2/a")
+            # collect the links from href
+            items_links = [link.get_attribute('href')
+                           for link in search_results]
+            return items_links
+        except Exception as e:
+            print("Did not find products, got the below error:")
+            print(e)
+        return items_links
 
 
 if __name__ == '__main__':
