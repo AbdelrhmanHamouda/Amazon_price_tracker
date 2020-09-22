@@ -117,7 +117,7 @@ class AmazonAPI:
             return str(asin)
         # handle regex failing because of no match in link
         except AttributeError:
-            pass
+            return ""
 
     def get_products_links(self):
         """
