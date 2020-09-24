@@ -106,7 +106,17 @@ class AmazonAPI:
         return None
 
     def get_seller(self, product_short_url):
-        pass
+        """
+        Method to locate the product seller name.
+
+        :param:     product_short_url - url for the product
+        :return:    seller - string, product title.
+        """
+        try:
+            seller = self.driver.find_element_by_id('bylineInfo').text
+            return seller
+        except:
+            return f"Could not get seller for {product_short_url}"
 
     def get_title(self, product_short_url):
         """
@@ -123,11 +133,12 @@ class AmazonAPI:
 
     def get_price(self, product_short_url):
         """
-        Method to locate the product title.
+        Method to locate the product price.
 
         :param:     product_short_url - url for the product
         :return:    price - string, product title.
         """
+        # TODO:: handle when there is not an amazon price but price available from someone else.
         try:
             price = self.driver.find_element_by_id('priceblock_ourprice').text
             return price
