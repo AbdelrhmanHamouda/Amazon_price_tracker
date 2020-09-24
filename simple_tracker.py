@@ -122,7 +122,17 @@ class AmazonAPI:
             return f"Could not get title for {product_short_url}"
 
     def get_price(self, product_short_url):
-        pass
+        """
+        Method to locate the product title.
+
+        :param:     product_short_url - url for the product
+        :return:    price - string, product title.
+        """
+        try:
+            price = self.driver.find_element_by_id('priceblock_ourprice').text
+            return price
+        except:
+            return f"Could not get price for {product_short_url}"
 
     def shorten_link(self, asin):
         """
