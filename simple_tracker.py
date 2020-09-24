@@ -62,10 +62,10 @@ class AmazonAPI:
 
     def get_products_info(self, links):
         """
-        Method to get information about the found products 
+        Method to get information about the found products
 
-        :param: links       - list of links to products 
-        :return: products   - list of products and its info 
+        :param: links       - list of links to products
+        :return: products   - list of products and its info
         """
         # get all uniq ids "asin"
         asins = self.get_asins(links)
@@ -81,7 +81,7 @@ class AmazonAPI:
         Method to collect product information based on asin
 
         :param: asin - product id
-        :return:  <to update> 
+        :return:  <to update>
         """
         print(f"Product ID: {asin} - getting info...")
         product_short_url = self.shorten_link(asin)
@@ -89,7 +89,40 @@ class AmazonAPI:
         self.driver.get(f'{product_short_url}')
         time.sleep(2)
 
-        return "to update"
+        # Get product info
+        title = self.get_title(product_short_url)
+        seller = self.get_seller(product_short_url)
+        price = self.get_price(product_short_url)
+
+        if title and seller and price:
+            product_info = {
+                'asin': asin,
+                'url': product_short_url,
+                'title': title,
+                'seller': seller,
+                'price': price
+            }
+            return product_info
+        return None
+
+    def get_seller(self, product_short_url):
+        pass
+
+    def get_title(self, product_short_url):
+        """
+        Method to locate the product title.
+
+        :param:     product_short_url - url for the product
+        :return:    title - string, product title.
+        """
+        try:
+            title = self.driver.find_element_by_id('productTitle').text
+            return title
+        except:
+            return f"Could not get title for {product_short_url}"
+
+    def get_price(self, product_short_url):
+        pass
 
     def shorten_link(self, asin):
         """
