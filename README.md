@@ -1,9 +1,9 @@
 # Amazon_price_tracker
 An Amazon price checker and tracker. 
 Current status:
-  - [done]          Parse products information from Amazon.com 
-  - [in progress]   Generate .json report with best price and link 
-  - [pending]       Tracking and graphing functionality. 
+  - ![#c5f015](https://via.placeholder.com/15/c5f015/000000?text=+)`[done]          Parse products information from Amazon.com`
+  - ![#c5f015](https://via.placeholder.com/15/c5f015/000000?text=+)`[in progress]   Generate .json report with best price and link.`
+  - ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+)`[pending]       Tracking and graphing functionality.`
 
 # How to use
 ```python
