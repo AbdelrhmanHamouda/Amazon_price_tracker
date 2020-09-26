@@ -1,5 +1,6 @@
 # Amazon_price_tracker
 An Amazon price checker and tracker. 
+
 Current status:
   - ![#c5f015](https://via.placeholder.com/15/c5f015/000000?text=+)`[done]          Parse products information from Amazon.com`
   - ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+)`[in progress]   Generate .json report with best price and link.`
