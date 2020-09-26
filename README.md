@@ -14,4 +14,6 @@ python3 simple_tracker.py
 ```
 
 
-Project inspired by: jakobowsky (https://github.com/jakobowsky)
+Project inspired by: 
+
+jakobowsky (https://github.com/jakobowsky)
