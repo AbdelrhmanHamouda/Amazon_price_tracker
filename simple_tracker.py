@@ -1,4 +1,6 @@
 import time
+import json
+from datetime import datetime
 import re
 from selenium.webdriver.common.keys import Keys
 from amazon_config import (
@@ -18,11 +20,59 @@ from amazon_config import (
 
 
 class GenerateReport:
-    def __init__(self):
-        pass
+    """
+    Class to generate json reports based on the collected data
+    """
+    # Solve issue with report reporting best price is Null
+
+    def __init__(self, file_name, filters, base_link, currency, data):
+        self.file_name = file_name
+        self.filters = filters
+        self.base_link = base_link
+        self.currency = currency
+        self.data = data
+        report = {
+            'Title': self.file_name,
+            'Date': self.get_now(),
+            'Best Item': self.get_best_item(),
+            'currency': self.currency,
+            'base_link': self.base_link,
+            'products': self.data
+        }
+        print("Creating report...")
+        with open(f'{DIRECTORY}/{file_name}.json', 'w') as fh:
+            json.dump(report, fh)
+        print("Report generation completed.")
+
+    def get_now(self):
+        """
+        Method to get the current time
+
+        :return: time - with %d/%m/%Y %H:%M:%S format
+        """
+        now = datetime.now()
+        return now.strftime("%d/%m/%Y %H:%M:%S")
+
+    def get_best_item(self):
+        """
+        Method to sort the results and get the best price
+
+        :return: sorted.price[0] or None in case of an exception
+        """
+        try:
+            # The lamda function greps the "price" info for each product
+            return sorted(self.data, k=lambda k: k['price'])[0]
+        except:
+            print("Got a problem while sorting items...")
+            return None
 
 
 class AmazonAPI:
+    """
+    Class to collect indo about the provided product
+    """
+    # TODO:: solve issues with currency detection
+
     def __init__(self, search_term, filters, base_url, currency):
         """
         Init all needed variables and mehtods for the API to work
@@ -58,7 +108,7 @@ class AmazonAPI:
 
         products = self.get_products_info(links)
 
-        return None
+        return products
 
     def get_products_info(self, links):
         """
@@ -138,7 +188,6 @@ class AmazonAPI:
         :param:     product_short_url - url for the product
         :return:    price - string, product title.
         """
-        # TODO:: handle when there is not an amazon price but price available from someone else.
         try:
             price = self.driver.find_element_by_id('priceblock_ourprice').text
             return price
@@ -213,3 +262,4 @@ class AmazonAPI:
 if __name__ == '__main__':
     amazon = AmazonAPI(NAME, FILTERS, BASE_URL, CURRENCY)
     data = amazon.run()
+    GenerateReport(NAME, FILTERS, BASE_URL, CURRENCY, data)
