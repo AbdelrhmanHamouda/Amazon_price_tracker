@@ -1,6 +1,6 @@
 from selenium import webdriver
 
-DIRECTORY = 'reprots'
+DIRECTORY = 'reports'
 NAME = "PS4"
 CURRENCY = "€"
 MIN_PRICE = "275"
