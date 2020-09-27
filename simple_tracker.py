@@ -220,13 +220,13 @@ class AmazonAPI:
         except AttributeError:
             return ""
 
-    def apply_filter(self, min_price=0, max_price=999999):
+    def apply_filter(self, min_price=0, max_price=999999, DEPARTMENT=''):
         """
         Method to apply the max, min prices and department (if know)
 
         :param: min_price, int  - min price to apply
         :param: max_price, int  - max price to apply
-        :param: department , str    - department to use
+        :param: department , str    - department to use (not used )
 
         :return: None
         """
