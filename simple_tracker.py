@@ -24,7 +24,7 @@ class GenerateReport:
     """
     Class to generate json reports based on the collected data
     """
-    # Solve issue with report reporting best price is Null
+    # TODO:: Solve issue with report reporting best price is Null
 
     def __init__(self, file_name, filters, base_link, currency, data):
         self.file_name = file_name
@@ -85,9 +85,6 @@ class AmazonAPI:
         set_browser_as_incognito(options)
         self.driver = get_chrome_web_driver(options)
         self.currency = currency
-        # TODO:: change the filter so it is a function that finds the elements on the page and click on them
-        # For now this is empty because o don't want to do it the way the turoial is doing it
-        self.price_filter = ''
 
     def run(self):
         """
@@ -223,7 +220,7 @@ class AmazonAPI:
         except AttributeError:
             return ""
 
-    def apply_filter(self, min_price=0, max_price=999999, department=''):
+    def apply_filter(self, min_price=0, max_price=999999):
         """
         Method to apply the max, min prices and department (if know)
 
@@ -242,14 +239,12 @@ class AmazonAPI:
             '//*[@id="a-autoid-1"]/span/input')
         # add value to the min price box
         amazon_min_price_box.send_keys(int(min_price))
+        time.sleep(0.5)
         # add value to the max price box
         amazon_max_price_box.send_keys(int(max_price))
+        time.sleep(0.5)
         # press go
         amazon_go_button_for_price.click()
-
-        # find department
-
-        # press departement
 
     def get_products_links(self):
         """
@@ -268,7 +263,7 @@ class AmazonAPI:
         amazon_search_box.send_keys(Keys.ENTER)
         # give the page time to load
         time.sleep(2)
-        # TODO:: implement the filtering for price rnage and type
+        # filtering for price rnage and type
         self.apply_filter(MIN_PRICE, MAX_PRICE, DEPARTMENT)
 
         # this xpath will match the whole table of results, each result is an element of that table
