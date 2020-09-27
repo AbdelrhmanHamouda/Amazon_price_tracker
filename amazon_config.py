@@ -5,6 +5,7 @@ NAME = "PS4"
 CURRENCY = "€"
 MIN_PRICE = "275"
 MAX_PRICE = "650"
+DEPARTMENT = ''
 
 
 FILTERS = {
