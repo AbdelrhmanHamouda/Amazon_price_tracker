@@ -16,6 +16,7 @@ from amazon_config import (
     MAX_PRICE,
     FILTERS,
     BASE_URL,
+    DEPARTMENT,
 )
 
 
@@ -210,8 +211,8 @@ class AmazonAPI:
         """
         Method uses regex to match the asin name from the url
 
-        :param: link - to extract the asin from 
-        :return: asin - the asin number as a string 
+        :param: link - to extract the asin from
+        :return: asin - the asin number as a string
         """
         # use regex to get the asin
         regex = re.compile('https.*/dp/(\w+)/ref=.*')
@@ -222,11 +223,39 @@ class AmazonAPI:
         except AttributeError:
             return ""
 
+    def apply_filter(self, min_price=0, max_price=999999, department=''):
+        """
+        Method to apply the max, min prices and department (if know)
+
+        :param: min_price, int  - min price to apply
+        :param: max_price, int  - max price to apply
+        :param: department , str    - department to use
+
+        :return: None
+        """
+        # find the min price box
+        amazon_min_price_box = self.driver.find_element_by_id('low-price')
+        # find the max price box
+        amazon_max_price_box = self.driver.find_element_by_id('high-price')
+        # find go button
+        amazon_go_button_for_price = self.driver.find_element_by_xpath(
+            '//*[@id="a-autoid-1"]/span/input')
+        # add value to the min price box
+        amazon_min_price_box.send_keys(int(min_price))
+        # add value to the max price box
+        amazon_max_price_box.send_keys(int(max_price))
+        # press go
+        amazon_go_button_for_price.click()
+
+        # find department
+
+        # press departement
+
     def get_products_links(self):
         """
         Method to collect product links
 
-        :return: items_links - list of links
+        : return: items_links - list of links
         """
         # Open url
         self.driver.get(self.base_url)
@@ -240,6 +269,7 @@ class AmazonAPI:
         # give the page time to load
         time.sleep(2)
         # TODO:: implement the filtering for price rnage and type
+        self.apply_filter(MIN_PRICE, MAX_PRICE, DEPARTMENT)
 
         # this xpath will match the whole table of results, each result is an element of that table
         results_list = self.driver.find_elements_by_xpath(
